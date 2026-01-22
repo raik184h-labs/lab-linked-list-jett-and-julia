@@ -221,34 +221,13 @@ public class MyLinkedList<E> implements List<E> {
     }
 
     @Override
-    public boolean removeAll(Collection<?> collection) {
-        boolean modified = false;
-
-        for (Object obj : collection) {
-            while (remove(obj)) { // keep removing until gone
-                modified = true;
-            }
-        }
-
-        return modified;
-    }
-
-    @Override
     public boolean remove(Object obj) {
-        Node current = head;
-        Node previous = null;
-        while (current != null) {
-            if (equals(obj, current.cargo)) {
-                if (previous == null) {
-                    head = current.next;
-                } else {
-                    previous.next = current.next;
+        if (obj == null) {
+            for (Node node = head; node != null; node = node.next) {
+                if (equals(obj, node.cargo)) {
+                    this.remove(node);
                 }
-                size--;
-                return true;
             }
-            previous = current;
-            current = current.next;
         }
         return false;
     }
@@ -257,22 +236,15 @@ public class MyLinkedList<E> implements List<E> {
     public E remove(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
-        }
-        Node current = head;
-        Node previous = null;
-        for (int i = 0; i < index; i++) {
-            previous = current;
-            current = current.next;
-        }
-        if (previous == null) {
-            head = current.next;
-        } else {
-            previous.next = current.next;
-        }
-        size--;
-        return current.cargo;
+        } 
+
+        Node node = getNode(index);
+        E value = node.cargo;
+        this.remove(node);
+        return value;
     }
 
+    
     @Override
     public boolean retainAll(Collection<?> collection) {
         throw new UnsupportedOperationException();
@@ -281,9 +253,9 @@ public class MyLinkedList<E> implements List<E> {
     @Override
     public E set(int index, E element) {
         Node node = getNode(index);
-        E oldValue = node.cargo;
-        node.cargo = element;
-        return oldValue;
+        E value = node.cargo;
+        this.remove(node);
+        return value;
     }
 
     @Override
@@ -293,20 +265,20 @@ public class MyLinkedList<E> implements List<E> {
 
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        if (fromIndex < 0 || toIndex > size || fromIndex > toIndex) {
+        if (fromIndex < 0 || toIndex >= size || fromIndex > toIndex) {
             throw new IndexOutOfBoundsException();
         }
-
-        MyLinkedList<E> list = new MyLinkedList<E>();
+        if (fromIndex == toIndex) {
+            return new MyLinkedList<E>();
+        }
         int i = 0;
-
+        MyLinkedList<E> list = new MyLinkedList<E>();
         for (Node node = head; node != null; node = node.next) {
-            if (i >= fromIndex && i < toIndex) { // 🔑 FIX HERE
+            if (i >= fromIndex && i <= toIndex) {
                 list.add(node.cargo);
             }
             i++;
         }
-
         return list;
     }
 

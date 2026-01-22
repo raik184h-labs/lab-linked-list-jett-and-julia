@@ -222,15 +222,7 @@ public class MyLinkedList<E> implements List<E> {
 
     @Override
     public boolean removeAll(Collection<?> collection) {
-        boolean modified = false;
-
-        for (Object obj : collection) {
-            while (remove(obj)) { // keep removing until gone
-                modified = true;
-            }
-        }
-
-        return modified;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -293,20 +285,20 @@ public class MyLinkedList<E> implements List<E> {
 
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        if (fromIndex < 0 || toIndex > size || fromIndex > toIndex) {
+        if (fromIndex < 0 || toIndex >= size || fromIndex > toIndex) {
             throw new IndexOutOfBoundsException();
         }
-
-        MyLinkedList<E> list = new MyLinkedList<E>();
+        if (fromIndex == toIndex) {
+            return new MyLinkedList<E>();
+        }
         int i = 0;
-
+        MyLinkedList<E> list = new MyLinkedList<E>();
         for (Node node = head; node != null; node = node.next) {
-            if (i >= fromIndex && i < toIndex) { // 🔑 FIX HERE
+            if (i >= fromIndex && i <= toIndex) {
                 list.add(node.cargo);
             }
             i++;
         }
-
         return list;
     }
 

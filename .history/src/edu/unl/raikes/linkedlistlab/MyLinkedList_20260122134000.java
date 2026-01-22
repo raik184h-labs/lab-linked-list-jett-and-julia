@@ -292,23 +292,24 @@ public class MyLinkedList<E> implements List<E> {
     }
 
     @Override
-    public List<E> subList(int fromIndex, int toIndex) {
-        if (fromIndex < 0 || toIndex > size || fromIndex > toIndex) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        MyLinkedList<E> list = new MyLinkedList<E>();
-        int i = 0;
-
-        for (Node node = head; node != null; node = node.next) {
-            if (i >= fromIndex && i < toIndex) { // 🔑 FIX HERE
-                list.add(node.cargo);
-            }
-            i++;
-        }
-
-        return list;
+public List<E> subList(int fromIndex, int toIndex) {
+    if (fromIndex < 0 || toIndex > size || fromIndex > toIndex) {
+        throw new IndexOutOfBoundsException();
     }
+
+    MyLinkedList<E> list = new MyLinkedList<E>();
+    int i = 0;
+
+    for (Node node = head; node != null; node = node.next) {
+        if (i >= fromIndex && i < toIndex) { // 🔑 FIX HERE
+            list.add(node.cargo);
+        }
+        i++;
+    }
+
+    return list;
+}
+
 
     @Override
     public Object[] toArray() {
